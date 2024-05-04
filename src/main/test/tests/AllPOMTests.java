@@ -2,12 +2,10 @@ package tests;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import pages.ContactUsPage;
-import pages.LoginPage;
-import pages.MonitorsPage;
-import pages.ProductPage;
+import pages.*;
 
 public class AllPOMTests extends BaseTest{
+
     @Test
     public void runAllTest(){
         LoginPage loginPage = homePage.openLoginFrom();

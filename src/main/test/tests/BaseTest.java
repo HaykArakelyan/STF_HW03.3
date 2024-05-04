@@ -9,24 +9,41 @@ import pages.HomePage;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 
 public class BaseTest {
     public static final String BASE_URL = "https://www.demoblaze.com/";
-
     private WebDriver driver;
     protected HomePage homePage;
+    private WebDriver chromeDriver;
+    private WebDriver firefoxDriver;
+    private WebDriver edgeDriver;
+
+    @BeforeTest
+    public void setUp() throws MalformedURLException {
+        chromeDriver = BrowserFactory.createRemoteDriver("chrome");
+        firefoxDriver = BrowserFactory.createRemoteDriver("firefox");
+        edgeDriver = BrowserFactory.createRemoteDriver("edge");
+    }
 
     @BeforeClass
     public void onStartUp(){
         driver = new ChromeDriver();
         driver.manage().window().maximize();
         driver.get(BASE_URL);
-        navigateHomePage();
+        navigateToHomePage();
     }
 
-    @AfterClass
-    public void navigateHomePage() {
-        homePage = new HomePage(driver);
+    @BeforeMethod
+    public void navigateToHomePage() {
+        chromeDriver.get(BASE_URL);
+        homePage = new HomePage(chromeDriver);
+
+        firefoxDriver.get(BASE_URL);
+        homePage = new HomePage(chromeDriver);
+
+        edgeDriver.get(BASE_URL);
+        homePage = new HomePage(edgeDriver);
     }
 
     @AfterClass
@@ -49,6 +66,16 @@ public class BaseTest {
         }
     }
 
-
-
+    @AfterTest
+    public void tearDown() {
+        if (chromeDriver != null) {
+            chromeDriver.quit();
+        }
+        if (firefoxDriver != null) {
+            firefoxDriver.quit();
+        }
+        if (edgeDriver != null) {
+            edgeDriver.quit();
+        }
+    }
 }
